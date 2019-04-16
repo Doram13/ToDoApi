@@ -89,6 +89,24 @@ namespace TodoApi.Controllers
             return NoContent();
         }
 
+        [HttpPut("{id}/toggle_status")]
+        public async Task<IActionResult> ToogleStatus(long id)
+        {
+            var todoItem = await _context.TodoItems.FindAsync(id);
+            if (todoItem == null)
+            {
+                return BadRequest();
+            }
+            if (todoItem.IsComplete)
+            {
+                todoItem.IsComplete = false;
+            }
+            else todoItem.IsComplete = true;
+            _context.Entry(todoItem).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
 
     }
 }
